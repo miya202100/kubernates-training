@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloworld-deployment
+  name: helloworld-v1-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: helloworld
+      app: helloworld-v1
   template:
     metadata:
       labels:
-        app: helloworld
+        app: helloworld-v1
     spec:
       containers:
         - name: k8s-demo
-          image: arjunachari12/k8s-demo
+          image: arjunachari12/k8s-demo:latest
           ports:
             - name: nodejs-port
               containerPort: 3000
@@ -23,12 +23,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: helloworld-service
+  name: helloworld-v1
 spec:
   ports:
-  - port: 31001
-    targetPort: nodejs-port
+  - port: 80
+    nodePort: 30303
+    targetPort: 3000
     protocol: TCP
+    name: http
   selector:
-    app: helloworld
+    app: helloworld-v1
   type: NodePort
